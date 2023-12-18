@@ -1,18 +1,26 @@
 import { Checkbox, HStack, Stack, Text } from "@chakra-ui/react";
-import { useTodo } from "../store";
+import { useFilter, useTodo } from "../store";
 
 const Todo = ({ id, title, completed }) => {
+  const toggleTodo = useTodo((state) => state.toggleTodo);
   return (
     <HStack spacing={4}>
-      <Checkbox isChecked={completed} />
+      <Checkbox isChecked={completed} onChange={() => toggleTodo(id)} />
       <Text>{title}</Text>
     </HStack>
   );
 };
 
 const TodoList = () => {
-  const todos = useTodo(state=>state.todos)
-
+  const filter = useFilter((state) => state.filter);
+  const todos = useTodo((state) => {
+    if (filter === "completed") {
+      return state.todos.filter((todo) => todo.completed);
+    } else if (filter === "uncompleted") {
+      return state.todos.filter((todo) => !todo.completed);
+    }
+    return state.todos;
+  });
   return (
     <Stack minH="300px">
       {todos.map((todo) => (
