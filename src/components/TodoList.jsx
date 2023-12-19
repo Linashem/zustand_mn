@@ -14,12 +14,14 @@ const Todo = ({ id, title, completed }) => {
 const TodoList = () => {
   const filter = useFilter((state) => state.filter);
   const todos = useTodo((state) => {
-    if (filter === "completed") {
-      return state.todos.filter((todo) => todo.completed);
-    } else if (filter === "uncompleted") {
-      return state.todos.filter((todo) => !todo.completed);
+    switch (filter) {
+      case 'completed':
+        return state.todos.filter((todo) => todo.completed);
+      case 'uncompleted':
+        return state.todos.filter((todo) => !todo.completed);
+      default:
+        return state.todos;
     }
-    return state.todos;
   });
   return (
     <Stack minH="300px">
